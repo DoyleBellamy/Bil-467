@@ -12,8 +12,6 @@ m,n = image.shape
 TOTAL_PIXEL = m*n
 MAX_PIXEL_VALUE = 255
 print(image.shape)
-# Shows us value of index (0,0) of our grayscale image
-print(image[0][0])
 
 # We will store the count of pixel values in an array
 histogram_values = np.zeros(256)
@@ -36,7 +34,6 @@ for i in range(m):
     histogram_equalization_pixel_matching[i] = math.floor(temp_value+0.5)
 
 new_image = image.copy()
-print(histogram_equalization_pixel_matching)
 for i in range(m):
     for j in range(n):
         new_image[i][j] = histogram_equalization_pixel_matching[new_image[i][j]]
@@ -51,11 +48,10 @@ equ = cv.equalizeHist(image)
 # show image input vs output
 cv.imshow('Output_2', equ)
 
-difference_image = np.zeros((m,n))
+difference_image = image.copy()
 for i in range(m):
     for j in range(n):
-        difference_image[i][j] = abs(new_image[i][j] - equ[i][j]) 
-
+        difference_image[i][j] = abs(new_image[i][j] - equ[i][j])
 cv.imshow('Difference', difference_image)
 
 cv.waitKey(0)
