@@ -1,8 +1,7 @@
 import cv2 as cv
-import os
-
-print(os.getcwd())
-image = cv.imread('lena_grayscale_hq.jpg',cv.IMREAD_GRAYSCALE)
+import os 
+#First Part
+image = cv.imread(os.path.join(os.getcwd(),'lena_grayscale_hq.jpg'),cv.IMREAD_GRAYSCALE)
 
 m,n = image.shape
 

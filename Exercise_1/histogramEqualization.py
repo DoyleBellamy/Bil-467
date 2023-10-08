@@ -1,10 +1,9 @@
 import cv2 as cv
 import numpy as np
 import math
-
+import os 
 #First Part
-
-image = cv.imread('test1.jpg',cv.IMREAD_GRAYSCALE)
+image = cv.imread(os.path.join(os.getcwd(),'test1.jpg'),cv.IMREAD_GRAYSCALE)
 
 m,n = image.shape
 TOTAL_PIXEL = m*n
