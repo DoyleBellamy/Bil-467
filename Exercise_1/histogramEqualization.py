@@ -8,11 +8,12 @@ image = cv.imread('test1.jpg',cv.IMREAD_GRAYSCALE)
 
 m,n = image.shape
 TOTAL_PIXEL = m*n
+# 256 ya çevir TODO
 MAX_PIXEL_VALUE = 255
 print(image.shape)
 
 histogram_values = np.zeros(256)
-LOWEST_PIXEL_VALUE = 255
+LOWEST_PIXEL_VALUE = 256
 
 for i in range(m):
     for j in range(n):
@@ -21,7 +22,6 @@ for i in range(m):
         histogram_values[image[i][j]] += 1
 
 histogram_distribution = np.zeros(256)
-print(LOWEST_PIXEL_VALUE)
 for i in range(m):
     histogram_distribution[i]=histogram_values[i]/TOTAL_PIXEL
 
@@ -70,16 +70,21 @@ for i in range(m):
 
 cv.imshow('Output 3', new_image_2)
 difference_image_2 = image.copy()
+
 for i in range(m):
     for j in range(n):
-        # print(str(new_image_2[i][j])+" and "+str(equ_opencv[i][j]))
         difference_image_2[i][j] = abs(int(new_image_2[i][j]) - int(equ_opencv[i][j]))
+
 cv.imshow('Difference2', difference_image_2)
 print(difference_image_2)
+
+# If any of the pixels of images OpenCv created and my second algorithm created are different
+# It prints WRONG on the screen
 for i in range(256):
     for j in range(256):
         if difference_image_2[i][j] != 0:
-            print("HATA")
+            print("WRONG")
+
 cv.waitKey(0)
 
 cv.destroyAllWindows()
