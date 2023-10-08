@@ -1,6 +1,7 @@
 import cv2 as cv
 import os 
 import numpy as np
+
 #First Part
 image = cv.imread(os.path.join(os.getcwd(),'lena_grayscale_hq.jpg'),cv.IMREAD_GRAYSCALE)
 
@@ -65,7 +66,7 @@ def getDifferenceImage(m,n,image1,image2):
 
 cv.imshow('Input image',image)
 
-# 3x3 Filter
+# # 3x3 Filter
 box_filter_size = 3
 image_3_3 = box_filter_function(m,n,image,box_filter_size)
 cv.imshow('output1_1', image_3_3)
@@ -91,5 +92,70 @@ image_21_21_openCv = openCVBoxFilter(box_filter_size)
 cv.imshow('output3_2', image_21_21_openCv)
 differenceImage_1_2_3 = getDifferenceImage(m,n,image_21_21,image_21_21_openCv)
 cv.imshow('Difference_1_2_3', differenceImage_1_2_3)
+
+# Second Part
+def box_filter_function_separate(m, n, image,box_filter_size):
+    
+    box_filter_image = image.copy()
+
+    box_filter_upper_bound = int((box_filter_size / 2))
+    box_filter_lower_bound = -box_filter_upper_bound
+    for i in range(m):
+        for j in range(n):
+            total_of_values_pixels = 0
+            for k in range(box_filter_lower_bound,box_filter_upper_bound+1):
+                if i+k >= 0 and i+k<m:
+                    total_of_values_pixels += image[i+k][j]
+            box_filter_image[i][j] = int(total_of_values_pixels / box_filter_size)
+    return box_filter_image
+
+def tranpose_image(image):
+    m,n = image.shape
+    image_transposed = image.copy()
+    for i in range(m):
+        image_transposed[:,i] = image[i,:]
+    return image_transposed
+
+# 3x3 Filter Part 2 
+box_filter_size = 3
+# We pass through with first filter 
+image_3_3_seperate_first = box_filter_function_separate(m,n,image,box_filter_size)
+# Now we will get the transpose of the image and run the same filter again
+# Better for cash performance
+image_3_3_seperate_first_transpose = tranpose_image(image_3_3_seperate_first)
+image_3_3_seperate_second = box_filter_function_separate(m,n,image_3_3_seperate_first_transpose,box_filter_size)
+image_3_3_seperate_second_transpose = tranpose_image(image_3_3_seperate_second)
+cv.imshow('output1_2_2', image_3_3_seperate_second_transpose)
+cv.imshow('output1_3_2', image_3_3_openCv)
+differenceImage_2_3_1 = getDifferenceImage(m,n,image_3_3_seperate_second_transpose,image_3_3_openCv)
+cv.imshow('Difference_2_3_1', differenceImage_2_3_1)
+
+#11x11 Filter Part 2 
+box_filter_size = 11
+# We pass through with first filter 
+image_11_11_seperate_first = box_filter_function_separate(m,n,image,box_filter_size)
+# Now we will get the transpose of the image and run the same filter again
+# Better for cash performance
+image_11_11_seperate_first_transpose = tranpose_image(image_11_11_seperate_first)
+image_11_11_seperate_second = box_filter_function_separate(m,n,image_11_11_seperate_first_transpose,box_filter_size)
+image_11_11_seperate_second_transpose = tranpose_image(image_11_11_seperate_second)
+cv.imshow('output2_1_2', image_11_11_seperate_second_transpose)
+cv.imshow('output2_2_2', image_11_11_openCv)
+differenceImage_2_3_2 = getDifferenceImage(m,n,image_11_11_seperate_second_transpose,image_11_11_openCv)
+cv.imshow('Difference_2_3_2', differenceImage_2_3_2)
+
+#21x21 Filter Part 2 
+box_filter_size = 21
+# We pass through with first filter 
+image_21_21_seperate_first = box_filter_function_separate(m,n,image,box_filter_size)
+# Now we will get the transpose of the image and run the same filter again
+# Better for cash performance
+image_21_21_seperate_first_transpose = tranpose_image(image_21_21_seperate_first)
+image_21_21_seperate_second = box_filter_function_separate(m,n,image_21_21_seperate_first_transpose,box_filter_size)
+image_21_21_seperate_second_transpose = tranpose_image(image_21_21_seperate_second)
+cv.imshow('output3_1_2', image_21_21_seperate_second_transpose)
+cv.imshow('output3_2_2', image_21_21_openCv)
+differenceImage_2_3_3 = getDifferenceImage(m,n,image_21_21_seperate_second_transpose,image_21_21_openCv)
+cv.imshow('Difference_2_3_3', differenceImage_2_3_3)
 
 cv.waitKey(0)
